@@ -1,4 +1,16 @@
 
+
+
+
+
+
+
+
+## 2.2 Tokenizing text
+
+
+
+
 import urllib.request
 import pandas as pd
 
@@ -112,9 +124,73 @@ print(ids_2)
 
 
 
-
-
 ## 2.4 Adding special context tokens
+
+
+preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', raw_txt)
+preprocessed = [item.strip() for item in preprocessed if item.strip()]
+
+all_tokens = sorted(list(set(preprocessed)))
+all_tokens.extend(["<|endoftext|>", "<|unk|>"])
+
+
+vocab = {token:integer for integer,token in enumerate(all_tokens)}
+print(vocab)
+
+print(len(vocab.items()))
+#1132
+
+
+class SimpleTokenizerV2:
+    def __init__(self, vocab):
+        self.str_to_int = vocab
+        self.int_to_str = {i: s for s, i in vocab.items()}
+
+    def encode(self, text):
+        preprocessed = re.split(r'([,.:;?_!"()\']|--|\s)', text)
+        preprocessed = [item.strip() for item in preprocessed if item.strip()]
+        preprocessed = [
+            item if item in self.str_to_int
+            else "<|unk|>" for item in preprocessed
+        ]
+
+        ids = [self.str_to_int[s] for s in preprocessed]
+        return ids
+
+    def decode(self, ids):
+        text = " ".join([self.int_to_str[i] for i in ids])
+        # Replace spaces before the specified punctuations
+        text = re.sub(r'\s+([,.:;?!"()\'])', r'\1', text)
+        return text
+
+
+
+my_text = "Now this new sentence will be the reason why the new function works"
+
+token_2 = SimpleTokenizerV2(vocab)
+
+x = token_2.encode(my_text)
+print(x)
+#[71, 999, 1131, 1131, 1131, 198, 988, 823, 1100, 988, 1131, 1131, 1131]
+
+
+
+
+
+
+
+
+
+
+## 2.5 BytePair encoding
+
+
+
+
+
+
+
+
 
 
 
