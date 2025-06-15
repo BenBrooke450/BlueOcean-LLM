@@ -182,7 +182,56 @@ print(x)
 
 
 
+
+
+
+
+
+
 ## 2.5 BytePair encoding
+
+import tiktoken
+
+
+print(tiktoken.__version__)
+#0.9.0
+
+tokenizer = tiktoken.get_encoding("gpt2")
+# SAME AS ids = token.encode(text)
+
+
+
+one = tokenizer.encode("Hello, world!")
+print(one)
+#[15496, 11, 995, 0]
+
+
+
+text = ("hello, do you like tea? <|endoftext|> In the sunlit terraces"
+        "This is a new line")
+#two = tokenizer.encode(text)
+#print(two)
+
+
+two = tokenizer.encode(text, allowed_special={"<|endoftext|>"})
+print(two)
+#[31373, 11, 466, 345, 588, 8887, 30, 220, 50256, 554, 262, 4252, 18250, 8812, 2114, 1212, 318, 257, 649, 1627]
+
+
+
+
+
+
+
+
+
+
+
+## 2.6 Data sampling with a sliding window
+
+
+
+
 
 
 
