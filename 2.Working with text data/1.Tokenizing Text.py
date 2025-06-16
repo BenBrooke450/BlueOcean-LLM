@@ -227,9 +227,109 @@ print(two)
 
 
 
+
+
+
+
 ## 2.6 Data sampling with a sliding window
 
 
+text_verdict = open("/Users/benjaminbrooke/PycharmProjects/Blue-Ocean/Data/The Verdict.txt","r",encoding="utf-8")
+raw_txt = text_verdict.read()
+
+enc_text = tokenizer.encode(raw_txt)
+print(len(enc_text))
+#5145
+
+enc_sample = enc_text[50:]
+
+context_size = 4
+
+x = enc_sample[:context_size]
+y = enc_sample[1:context_size+1]
+
+print(f"x: {x}")
+print(f"y:      {y}")
+#x: [290, 4920, 2241, 287]
+#y:      [4920, 2241, 287, 257]
+
+
+
+
+
+for i in range(1, context_size+1):
+    context = enc_sample[:i]
+    desired = enc_sample[i]
+
+    print(context, "---->", desired)
+
+#[290] ----> 4920
+#[290, 4920] ----> 2241
+#[290, 4920, 2241] ----> 287
+#[290, 4920, 2241, 287] ----> 257
+
+
+
+
+
+import torch
+print(torch.__version__)
+#2.7.1
+
+
+
+
+
+from torch.utils.data import Dataset, DataLoader
+
+
+class GPTDatasetV1(Dataset):
+    def __init__(self, txt, tokenizer, max_length, stride):
+        self.input_ids = []
+        self.target_ids = []
+
+        # Tokenize the entire text
+        token_ids = tokenizer.encode(txt, allowed_special={"<|endoftext|>"})
+        assert len(token_ids) > max_length, "Number of tokenized inputs must at least be equal to max_length+1"
+
+        # Use a sliding window to chunk the book into overlapping sequences of max_length
+        for i in range(0, len(token_ids) - max_length, stride):
+            input_chunk = token_ids[i:i + max_length]
+            target_chunk = token_ids[i + 1: i + max_length + 1]
+            self.input_ids.append(torch.tensor(input_chunk))
+            self.target_ids.append(torch.tensor(target_chunk))
+
+    def __len__(self):
+        return len(self.input_ids)
+
+    def __getitem__(self, idx):
+        return self.input_ids[idx], self.target_ids[idx]
+
+
+
+
+
+
+def create_dataloader_v1(txt, batch_size=4, max_length=256,
+                         stride=128, shuffle=True, drop_last=True,
+                         num_workers=0):
+
+    # Initialize the tokenizer
+    tokenizer = tiktoken.get_encoding("gpt2")
+
+    # Create dataset
+    dataset = GPTDatasetV1(txt, tokenizer, max_length, stride)
+
+    # Create dataloader
+    dataloader = DataLoader(
+        dataset,
+        batch_size=batch_size,
+        shuffle=shuffle,
+        drop_last=drop_last,
+        num_workers=num_workers
+    )
+
+    return dataloader
 
 
 
@@ -238,6 +338,57 @@ print(two)
 
 
 
+
+dataloader = create_dataloader_v1(
+    raw_txt, batch_size=1, max_length=4, stride=1, shuffle=False
+)
+
+data_iter = iter(dataloader)
+first_batch = next(data_iter)
+print(first_batch)
+#[tensor([[  40,  367, 2885, 1464]]), tensor([[ 367, 2885, 1464, 1807]])]
+
+
+
+second_batch = next(data_iter)
+print(second_batch)
+#[tensor([[ 367, 2885, 1464, 1807]]), tensor([[2885, 1464, 1807, 3619]])]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 2.7 Creating token embeddings
+
+inputs_ids = torch.tensor([2 , 3, 5 , 1])
+
+vocab_size = 6
+output_dim = 3
+
+torch.manual_seed(123)
+embedding_layer = torch.nn.Embedding(vocab_size,output_dim)
+
+print(embedding_layer.weight)
+"""
+Parameter containing:
+tensor([[ 0.3374, -0.1778, -0.1690],
+        [ 0.9178,  1.5810,  1.3010],
+        [ 1.2753, -0.2010, -0.1606],
+        [-0.4015,  0.9666, -1.1481],
+        [-1.1589,  0.3255, -0.6315],
+        [-2.8400, -0.7849, -1.4096]], requires_grad=True)
+"""
 
 
 
