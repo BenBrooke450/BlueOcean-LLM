@@ -390,6 +390,9 @@ tensor([[ 0.3374, -0.1778, -0.1690],
         [-2.8400, -0.7849, -1.4096]], requires_grad=True)
 """
 
+print(embedding_layer(torch.tensor([3])))
+#tensor([[-0.4015,  0.9666, -1.1481]], grad_fn=<EmbeddingBackward0>)
+
 
 
 
