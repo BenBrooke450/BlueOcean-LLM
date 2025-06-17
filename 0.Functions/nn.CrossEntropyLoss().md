@@ -1,0 +1,6 @@
+
+```python
+
+nn.CrossEntropyLoss()
+
+```
