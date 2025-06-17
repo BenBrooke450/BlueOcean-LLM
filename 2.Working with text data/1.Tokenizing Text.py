@@ -411,8 +411,26 @@ output_dim = 256
 
 token_embedding_layer = torch.nn.Embedding(vocab_size, output_dim)
 
+max_length = 4
+dataloader = create_dataloader_v1(
+    raw_txt, batch_size=8, max_length=max_length,
+    stride=max_length, shuffle=False
+)
+data_iter = iter(dataloader)
+inputs, targets = next(data_iter)
 
 
+context_length = max_length
+pos_embedding_layer = torch.nn.Embedding(context_length, output_dim)
+
+# uncomment & execute the following line to see how the embedding layer weights look like
+# print(pos_embedding_layer.weight)
+
+
+pos_embeddings = pos_embedding_layer(torch.arange(max_length))
+
+print(pos_embeddings.shape)
+#torch.Size([4, 256])
 
 
 
