@@ -53,8 +53,10 @@ print(attn_scores_2)
 
 
 
+attn_scores_2_temp = attn_scores_2 / attn_scores_2.sum()
 
-
+print(attn_scores_2_temp)
+#tensor([0.1455, 0.2278, 0.2249, 0.1285, 0.1077, 0.1656])
 
 
 
