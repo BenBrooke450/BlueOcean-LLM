@@ -59,6 +59,18 @@ print(attn_scores_2_temp)
 #tensor([0.1455, 0.2278, 0.2249, 0.1285, 0.1077, 0.1656])
 
 
+def sofrmax(x):
+    return torch.exp(x) / torch.exp(x).sum(dim=0)
+
+print(sofrmax(attn_scores_2))
+#tensor([0.1385, 0.2379, 0.2333, 0.1240, 0.1082, 0.1581])
+
+
+print(torch.softmax(attn_scores_2,dim = 0))
+#tensor([0.1385, 0.2379, 0.2333, 0.1240, 0.1082, 0.1581])
+
+
+
 
 
 
