@@ -139,7 +139,7 @@ tensor([[0.9995, 0.9544, 0.9422, 0.4753, 0.4576, 0.6310],
 
 
 
-attn_weights = torch.softmax(attn_scores, dim=-1)
+attn_weights = torch.softmax(attn_scores, dim=1)
 print(attn_weights)
 """
 tensor([[0.2098, 0.2006, 0.1981, 0.1242, 0.1220, 0.1452],
@@ -152,7 +152,15 @@ tensor([[0.2098, 0.2006, 0.1981, 0.1242, 0.1220, 0.1452],
 
 
 
-
-
+all_context_vecs = attn_weights @ inputs
+print(all_context_vecs)
+"""
+tensor([[0.4421, 0.5931, 0.5790],
+        [0.4419, 0.6515, 0.5683],
+        [0.4431, 0.6496, 0.5671],
+        [0.4304, 0.6298, 0.5510],
+        [0.4671, 0.5910, 0.5266],
+        [0.4177, 0.6503, 0.5645]])
+"""
 
 
