@@ -75,6 +75,17 @@ print(torch.softmax(attn_scores_2,dim = 0))
 
 
 
+attn_weights_2 = torch.softmax(attn_scores_2, dim=0)
+
+query = inputs[1] # 2nd input token is the query
+
+context_vec_2 = torch.zeros(query.shape)
+
+for i,x_i in enumerate(inputs):
+    context_vec_2 += attn_weights_2[i]*x_i
+
+print(context_vec_2)
+#tensor([0.4419, 0.6515, 0.5683])
 
 
 
@@ -82,3 +93,28 @@ print(torch.softmax(attn_scores_2,dim = 0))
 
 
 
+
+
+
+
+
+
+
+
+
+
+attn_scores = torch.empty(6, 6)
+
+for i, x_i in enumerate(inputs):
+    for j, x_j in enumerate(inputs):
+        attn_scores[i, j] = torch.dot(x_i, x_j)
+
+print(attn_scores)
+"""
+tensor([[0.9995, 0.9544, 0.9422, 0.4753, 0.4576, 0.6310],
+        [0.9544, 1.4950, 1.4754, 0.8434, 0.7070, 1.0865],
+        [0.9422, 1.4754, 1.4570, 0.8296, 0.7154, 1.0605],
+        [0.4753, 0.8434, 0.8296, 0.4937, 0.3474, 0.6565],
+        [0.4576, 0.7070, 0.7154, 0.3474, 0.6654, 0.2935],
+        [0.6310, 1.0865, 1.0605, 0.6565, 0.2935, 0.9450]])
+"""
