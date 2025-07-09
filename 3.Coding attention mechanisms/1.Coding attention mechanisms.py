@@ -169,6 +169,8 @@ tensor([[0.4421, 0.5931, 0.5790],
 x_2 = inputs[1] # second input element
 d_in = inputs.shape[1] # the input embedding size, d=3
 d_out = 2 # the output embedding size, d=2
+print(x_2)
+#tensor([0.5500, 0.8700, 0.6600])
 
 
 torch.manual_seed(123)
@@ -194,3 +196,5 @@ value_2 = x_2 @ W_value
 
 print(query_2)
 #tensor([0.4306, 1.4551])
+
+
