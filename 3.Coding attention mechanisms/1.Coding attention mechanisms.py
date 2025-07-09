@@ -164,3 +164,33 @@ tensor([[0.4421, 0.5931, 0.5790],
 """
 
 
+
+
+x_2 = inputs[1] # second input element
+d_in = inputs.shape[1] # the input embedding size, d=3
+d_out = 2 # the output embedding size, d=2
+
+
+torch.manual_seed(123)
+
+W_query = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+W_key   = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+W_value = torch.nn.Parameter(torch.rand(d_in, d_out), requires_grad=False)
+
+
+print(W_query)
+"""
+Parameter containing:
+tensor([[0.2961, 0.5166],
+        [0.2517, 0.6886],
+        [0.0740, 0.8665]])
+"""
+
+
+
+query_2 = x_2 @ W_query # _2 because it's with respect to the 2nd input element
+key_2 = x_2 @ W_key
+value_2 = x_2 @ W_value
+
+print(query_2)
+#tensor([0.4306, 1.4551])
