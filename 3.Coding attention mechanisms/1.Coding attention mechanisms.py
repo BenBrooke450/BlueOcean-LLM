@@ -198,3 +198,37 @@ print(query_2)
 #tensor([0.4306, 1.4551])
 
 
+
+
+
+keys = inputs @ W_key
+values = inputs @ W_value
+
+print("keys.shape:", keys.shape)
+print("values.shape:", values.shape)
+#keys.shape: torch.Size([6, 2])
+#values.shape: torch.Size([6, 2])
+
+
+
+keys_2 = keys[1] # Python starts index at 0
+attn_score_22 = query_2.dot(keys_2)
+print(attn_score_22)
+#tensor(1.8524)
+
+
+
+
+attn_scores_2 = query_2 @ keys.T # All attention scores for given query
+print(attn_scores_2)
+
+
+
+
+
+
+
+
+
+
+
