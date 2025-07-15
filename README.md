@@ -1,4 +1,4 @@
-# Medical Research Large Language Model (LLM) from Scratch
+# Medical Research Large Language Model (LLM)
 
 <br>
 
