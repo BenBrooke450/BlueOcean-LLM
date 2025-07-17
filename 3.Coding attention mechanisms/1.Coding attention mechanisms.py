@@ -221,9 +221,114 @@ print(attn_score_22)
 
 attn_scores_2 = query_2 @ keys.T # All attention scores for given query
 print(attn_scores_2)
+#tensor([1.2705, 1.8524, 1.8111, 1.0795, 0.5577, 1.5440])
 
 
 
+d_k = keys.shape[1]
+attn_weights_2 = torch.softmax(attn_scores_2 / d_k**0.5, dim=-1)
+print(attn_weights_2)
+#tensor([0.1500, 0.2264, 0.2199, 0.1311, 0.0906, 0.1820])
+
+
+
+context_vec_2 = attn_weights_2 @ values
+print(context_vec_2)
+#tensor([0.3061, 0.8210])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 3.4.2 Implementing a compact SelfAttention class
+
+import torch.nn as nn
+
+
+class SelfAttention_v1(nn.Module):
+
+    def __init__(self, d_in, d_out):
+        super().__init__()
+        self.W_query = nn.Parameter(torch.rand(d_in, d_out))
+        self.W_key = nn.Parameter(torch.rand(d_in, d_out))
+        self.W_value = nn.Parameter(torch.rand(d_in, d_out))
+
+    def forward(self, x):
+        keys = x @ self.W_key
+        queries = x @ self.W_query
+        values = x @ self.W_value
+
+        attn_scores = queries @ keys.T  # omega
+        attn_weights = torch.softmax(attn_scores / keys.shape[-1] ** 0.5, dim=-1)
+
+        context_vec = attn_weights @ values
+        return context_vec
+
+
+torch.manual_seed(123)
+sa_v1 = SelfAttention_v1(d_in, d_out)
+print(sa_v1(inputs))
+"""
+tensor([[0.2996, 0.8053],
+        [0.3061, 0.8210],
+        [0.3058, 0.8203],
+        [0.2948, 0.7939],
+        [0.2927, 0.7891],
+        [0.2990, 0.8040]], grad_fn=<MmBackward0>)
+
+"""
+
+
+
+m =  torch.nn.Linear(2,3)
+print(m.weight)
+"""
+tensor([[-0.1668,  0.2270],
+        [ 0.5000,  0.1317],
+        [ 0.1934,  0.6825]], requires_grad=True)
+"""
+
+
+class SelfAttention_v2(nn.Module):
+
+    def __init__(self, d_in, d_out, qkv_bias=False):
+        super().__init__()
+        self.W_query = nn.Linear(d_in, d_out, bias=qkv_bias)
+        self.W_key = nn.Linear(d_in, d_out, bias=qkv_bias)
+        self.W_value = nn.Linear(d_in, d_out, bias=qkv_bias)
+
+    def forward(self, x):
+        keys = self.W_key(x)
+        queries = self.W_query(x)
+        values = self.W_value(x)
+
+        attn_scores = queries @ keys.T
+        attn_weights = torch.softmax(attn_scores / keys.shape[-1] ** 0.5, dim=-1)
+
+        context_vec = attn_weights @ values
+        return context_vec
+
+
+torch.manual_seed(789)
+sa_v2 = SelfAttention_v2(d_in, d_out)
+print(sa_v2(inputs))
+"""
+tensor([[-0.0739,  0.0713],
+        [-0.0748,  0.0703],
+        [-0.0749,  0.0702],
+        [-0.0760,  0.0685],
+        [-0.0763,  0.0679],
+        [-0.0754,  0.0693]], grad_fn=<MmBackward0>)
+"""
 
 
 
