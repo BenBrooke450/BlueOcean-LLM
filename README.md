@@ -1,9 +1,12 @@
-# Medical Research Large Language Model (LLM) from Scratch
+# Medical Research Large Language Model (LLM)
 
+<br>
 
+## Overview:
 
-## Overview
-## This project aims to build a Large Language Model (LLM) from scratch, specifically designed for processing and understanding medical research papers. Leveraging both PyTorch and TensorFlow, the model is built end-to-end based on state-of-the-art techniques and architectures described in recent medical NLP research.
+### This project aims to build a Large Language Model (LLM) from scratch, specifically designed for processing and understanding medical research papers. Leveraging both PyTorch and TensorFlow, the model is built end-to-end based on state-of-the-art techniques and architectures described in recent medical NLP research.
+
+<br>
 
 The goal is to create a robust, domain-specific language model that can support advanced medical text mining, question answering, summarization, and knowledge extraction tasks.
 
